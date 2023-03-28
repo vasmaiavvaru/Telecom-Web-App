@@ -3,8 +3,11 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useAuthContext } from '../contexts/AuthContext';
 
 export function GuestDetails() {
+    const { authState } = useAuthContext();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -13,7 +16,7 @@ export function GuestDetails() {
             password: data.get('password'),
         });
     };
-
+    
     return (
         <Box
             sx={{
@@ -32,6 +35,7 @@ export function GuestDetails() {
                             fullWidth
                             id="firstName"
                             label="First Name"
+                            defaultValue={authState?.user ? authState?.user.firstName : ""}
                             autoFocus
                         />
                     </Grid>
@@ -42,6 +46,7 @@ export function GuestDetails() {
                             id="lastName"
                             label="Last Name"
                             name="lastName"
+                            defaultValue={authState?.user ? authState?.user.lastName : ""}
                             autoComplete="family-name"
                         />
                     </Grid>
@@ -52,6 +57,7 @@ export function GuestDetails() {
                             id="mobileNumber"
                             label="Mobile"
                             name="mobileNumber"
+                            defaultValue={authState?.user ? authState?.user.mobileNumber : ""}
                             autoComplete="phone"
                         />
                     </Grid>
@@ -61,53 +67,9 @@ export function GuestDetails() {
                             fullWidth
                             id="email"
                             label="Email Address"
+                            defaultValue={authState?.user ? authState?.user.emailAddress : ""}
                             name="email"
                             autoComplete="email"
-                        />
-                    </Grid>
-                </Grid>
-                <Typography variant="h6" gutterBottom sx={{ mt:3 }}>
-                    Payment method
-                </Typography>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            id="cardName"
-                            label="Name on card"
-                            fullWidth
-                            autoComplete="cc-name"
-                            variant="standard"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            required
-                            id="cardNumber"
-                            label="Card number"
-                            fullWidth
-                            autoComplete="cc-number"
-                            variant="standard"
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            required
-                            id="expDate"
-                            label="Expiry date"
-                            fullWidth
-                            autoComplete="cc-exp"
-                            variant="standard"
-                        />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <TextField
-                            required
-                            id="cvv"
-                            label="CVV"
-                            fullWidth
-                            autoComplete="cc-csc"
-                            variant="standard"
                         />
                     </Grid>
                 </Grid>

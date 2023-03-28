@@ -8,8 +8,10 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../contexts/AppContext';
 
-const tiers = [
+const plans = [
     {
         title: 'Basic',
         price: '100',
@@ -45,6 +47,14 @@ const tiers = [
 ];
 
 export function HomePage() {
+    const navigate = useNavigate();
+    const { appState, selectPlan } = useAppContext();
+
+    const handleSelectPlan = (plan) => {
+        selectPlan(plan);
+        navigate("/checkout");
+    }
+
     return (
         <React.Fragment>
             <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
@@ -60,19 +70,19 @@ export function HomePage() {
             </Container>
             <Container maxWidth="md" component="main">
                 <Grid container spacing={5} alignItems="flex-end">
-                    {tiers.map((tier) => (
+                    {plans.map((plan) => (
                         // Enterprise card is full width at sm breakpoint
                         <Grid
                             item
-                            key={tier.title}
+                            key={plan.title}
                             xs={12}
                             sm={6}
                             md={4}
                         >
                             <Card>
                                 <CardHeader
-                                    title={tier.title}
-                                    subheader={tier.subheader}
+                                    title={plan.title}
+                                    subheader={plan.subheader}
                                     titleTypographyProps={{ align: 'center' }}
                                     subheaderTypographyProps={{
                                         align: 'center',
@@ -94,14 +104,14 @@ export function HomePage() {
                                         }}
                                     >
                                         <Typography component="h2" variant="h3" color="text.primary">
-                                            &#8377;{tier.price}
+                                            &#8377;{plan.price}
                                         </Typography>
                                         <Typography variant="h6" color="text.secondary">
                                             /mo
                                         </Typography>
                                     </Box>
                                     <ul>
-                                        {tier.description.map((line) => (
+                                        {plan.description.map((line) => (
                                             <Typography
                                                 component="li"
                                                 variant="subtitle1"
@@ -114,8 +124,8 @@ export function HomePage() {
                                     </ul>
                                 </CardContent>
                                 <CardActions>
-                                    <Button fullWidth variant={tier.buttonVariant} href="/checkout">
-                                        {tier.buttonText}
+                                    <Button fullWidth variant={plan.buttonVariant} onClick={() => handleSelectPlan(plan)}>
+                                        {plan.buttonText}
                                     </Button>
                                 </CardActions>
                             </Card>

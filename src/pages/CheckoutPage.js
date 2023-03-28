@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -6,31 +6,48 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { Login } from "../components/Login"
 import { GuestDetails } from "../components/GuestDetails";
 import ReviewOrder from "../components/ReviewOrder";
-
-const plan = {
-    name: 'Basic',
-    desc: [
-        'Unlimited talk and text',
-        '10 GB data included',
-        '28 days validity'],
-    price: '100'
-}
+import { useAuthContext } from "../contexts/AuthContext";
+import { useAppContext } from "../contexts/AppContext";
 
 const steps = ['Login', 'Details', 'Review your order'];
 
 export function CheckoutPage() {
+    const { authState } = useAuthContext();
+    const { appState, storePaymentDetails } = useAppContext();
     const [activeStep, setActiveStep] = useState(0);
 
-    const handleNext = () => {
+    useEffect(() => {
+        if (authState?.user) {
+            setActiveStep(1);
+        }
+    }, [authState])
+
+    const handleDetailsNext = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const paymentData = {
+            cardName: data.get('cardName'),
+            cardNumber: data.get('cardNumber'),
+            expDate: data.get('expDate'),
+            cvv: data.get('cvv')
+        };
+
+        storePaymentDetails(paymentData)
         setActiveStep(activeStep + 1);
     };
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
+    };
+
+    const handleNext = () => {
+        setActiveStep(activeStep + 1);
     };
 
     const handleCheckOut = () => {
@@ -57,19 +74,70 @@ export function CheckoutPage() {
                 return (<Container component="main" maxWidth="xs">
                     <Container>
                         <GuestDetails />
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            onClick={() => handleNext()}
-                        >
-                            Proceed
-                        </Button>
+                        <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                            Payment method
+                        </Typography>
+                        <Box component="form" onSubmit={handleDetailsNext} noValidate sx={{ mt: 1 }}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        id="cardName"
+                                        name="cardName"
+                                        label="Name on card"
+                                        fullWidth
+                                        autoComplete="cc-name"
+                                        variant="standard"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        id="cardNumber"
+                                        name="cardNumber"
+                                        label="Card number"
+                                        fullWidth
+                                        autoComplete="cc-number"
+                                        variant="standard"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        id="expDate"
+                                        name="expDate"
+                                        label="Expiry date"
+                                        fullWidth
+                                        autoComplete="cc-exp"
+                                        variant="standard"
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TextField
+                                        required
+                                        id="cvv"
+                                        name="cvv"
+                                        label="CVV"
+                                        fullWidth
+                                        autoComplete="cc-csc"
+                                        variant="standard"
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3 }}
+                            >
+                                Proceed
+                            </Button>
+                        </Box>
                     </Container>
                 </Container>);
             case 2:
                 return (<>
-                    <ReviewOrder mobileNumber={999999999} plan={plan} />
+                    <ReviewOrder mobileNumber={authState?.user?.mobileNumber} plan={appState?.selectedPlan} payment={appState?.paymentDetails}/>
                     <Button
                         fullWidth
                         variant="contained"
