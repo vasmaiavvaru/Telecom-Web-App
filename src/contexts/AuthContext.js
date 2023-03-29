@@ -1,5 +1,5 @@
 import { createContext, useReducer, useContext, useMemo } from 'react';
-import { SignInWithEmailAndPassword, CreateUserWithEmailAndPassword } from '../services/AuthService';
+import { SignInWithMobileNumberAndPassword, CreateUserWithMobileNumberAndPassword } from '../services/AuthService';
 
 const AuthContext = createContext();
 
@@ -35,14 +35,14 @@ const AuthProvider = ({ children }) => {
                 dispatch,
                 signIn: async (data) =>{
                     dispatch({ type: 'LOADING' })
-                    await SignInWithEmailAndPassword(data)
+                    await SignInWithMobileNumberAndPassword(data)
                     .then((user) => {
                         dispatch({ type: 'LOGIN_SUCCESS', payload: { user: user } })
                     })
                 },
                 signUp: async (data) => {
                     dispatch({ type: 'LOADING' })
-                    await CreateUserWithEmailAndPassword(data)
+                    await CreateUserWithMobileNumberAndPassword(data)
                     .then((user) => {
                         dispatch({ type: 'REGISTER_SUCCESS', payload: { user: user } })
                     })

@@ -16,7 +16,7 @@ export function Login({ handleLogin }) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const request = {
-            email: data.get('mobileNumber'),
+            mobileNumber: data.get('mobileNumber'),
             password: data.get('password'),
         };
         await signIn(request)
