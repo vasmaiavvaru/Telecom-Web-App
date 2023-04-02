@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -10,6 +10,12 @@ import { useAuthContext } from './contexts/AuthContext';
 
 function App() {
     const { authState } = useAuthContext();
+    const[token, settoken] = useState(localStorage.getItem("userToken"))
+    const navigate = useNavigate()
+    const handleLogut = ()=>{
+        return (settoken(null), navigate("/"), window.location.reload(false))
+        
+    }
 
     return (
         <div >
@@ -29,6 +35,8 @@ function App() {
                                 <LockOpenOutlined />
                             </Avatar> 
                             <Link to="/account">{authState.user.firstName} {authState.user.lastName}</Link>
+                            {token && (<span style={{marginLeft:"10px"}}><Button onClick={handleLogut} variant="outlined">Logout</Button></span>)}
+
                         </> :
                         <>
                             <Button href="/login" variant="outlined" sx={{ my: 1, mx: 1.5 }}>
@@ -38,6 +46,7 @@ function App() {
                                 SignUp
                             </Button>
                         </>}
+                        {/* {token && (<button type='button' onClick={handleLogut} className='btn btn-danger'>Logout</button>)} */}
                 </Toolbar>
             </AppBar>
         </div>

@@ -1,4 +1,4 @@
-
+// import { useState,useEffect } from "react";
 export async function SignInWithMobileNumberAndPassword(data){
     // const url = `${process.env.API_BASE_URL}/api/signin`;
     // const options = {
@@ -17,11 +17,12 @@ export async function SignInWithMobileNumberAndPassword(data){
     // catch (err) {
     //     throw err;
     // }
+    
     return {
-            firstName: "Test",
-            lastName: "User",
-            mobileNumber: "9999999999",
-            emailAddress: "test.user@test.com"
+            firstName: "Vasmai",
+            lastName: "Avvaru",
+            mobileNumber: "8985724999",
+            emailAddress: "vasmai.avvaru@gmail.com"
     }
 }
 
@@ -44,11 +45,35 @@ export async function CreateUserWithMobileNumberAndPassword(data) {
     // catch (err) {
     //     throw err;
     // }
+    // const[userdata, setuserdata] = useState({})
+   
+    //   useEffect(()=>{
+    //       const fetchTUser = async()=>{
+    //           const responseOptions = {
+    //               method:'POST',
+    //               headers:{
+    //                   'Content-Type':'application/json',
+    //                   Authorization:"Bearer " + localStorage.getItem("userToken")
+    //               },
+    //           }
+    //           const response = await fetch("http://127.0.0.1:8000/api/v1/users/token/decoder", responseOptions)
+    //           const data = await response.json()
+    //           if(!response.ok){
+    //               console.log({"error":data.detail})
+    //           }
+    //           else{
+    //               console.log(data)
+    //               setuserdata(data)
+    //           }
+    //       }
+    //       fetchTUser();
+    //   },[])
+
 
     return {
-        firstName: "Test",
-        lastName: "User",
-        mobileNumber: "9999999999",
-        emailAddress: "test.user@test.com"
-}
+        firstName: "Vasmai",
+        lastName: "Avvaru",
+        mobileNumber: "8985724999",
+        emailAddress: "vasmai.avvaru@gmail.com"
+    }
 }

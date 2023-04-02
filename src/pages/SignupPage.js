@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -9,8 +9,44 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useNavigate } from 'react-router-dom';
 
 export function SignupPage() {
+    const[email, setemail] = useState("")
+    const[password, setpassword] = useState("")
+    const[mobile, setmobile] = useState("")
+    const[adress, setadress] = useState("")
+    const[firstname, setfirstname] = useState("")
+    const[lastname, setlastname] = useState("")
+    const navigate = useNavigate()
+    //edited
+        const registerUser = async()=>{
+            const requestOptions = {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({
+                    "email": email,
+                    "password": password,
+                    "firstName": firstname,
+                    "lastName": lastname,
+                    "mobileNumber": mobile,
+                    "postalAddress": adress
+                  })
+            }
+            const response = await fetch("http://localhost:8000/api/v1/users/register", requestOptions)
+            const data = await response.json()
+            if(!response.ok){
+                console.log({"error":data.detail})
+            }
+            else{
+                console.log(data)
+                console.log(firstname,lastname,email,password,adress,mobile)
+                navigate("/login")
+            }
+        }
+    //edited
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -18,7 +54,11 @@ export function SignupPage() {
             email: data.get('email'),
             password: data.get('password'),
         });
+        //edited
+        registerUser();
+        //edited
     };
+
 
     return (<Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -47,6 +87,8 @@ export function SignupPage() {
                             id="firstName"
                             label="First Name"
                             autoFocus
+                            value={firstname}
+                            onChange={(e)=>{setfirstname(e.target.value)}}
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
@@ -57,6 +99,8 @@ export function SignupPage() {
                             label="Last Name"
                             name="lastName"
                             autoComplete="family-name"
+                            value={lastname}
+                            onChange={(e)=>{setlastname(e.target.value)}}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -67,6 +111,8 @@ export function SignupPage() {
                             label="Mobile"
                             name="mobileNumber"
                             autoComplete="phone"
+                            value={mobile}
+                            onChange={(e)=>setmobile(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -77,6 +123,8 @@ export function SignupPage() {
                             label="Email Address"
                             name="email"
                             autoComplete="email"
+                            value={email}
+                            onChange={(e)=>setemail(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -87,6 +135,8 @@ export function SignupPage() {
                             label="Address"
                             name="address"
                             autoComplete="address"
+                            value={adress}
+                            onChange={(e)=>setadress(e.target.value)}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -98,6 +148,8 @@ export function SignupPage() {
                             type="password"
                             id="password"
                             autoComplete="new-password"
+                            value={password}
+                            onChange={(e)=>setpassword(e.target.value)}
                         />
                     </Grid>
                 </Grid>

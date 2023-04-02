@@ -14,6 +14,7 @@ import { GuestDetails } from "../components/GuestDetails";
 import ReviewOrder from "../components/ReviewOrder";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useAppContext } from "../contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 
 const steps = ['Login', 'Details', 'Review your order'];
 
@@ -21,6 +22,7 @@ export function CheckoutPage() {
     const { authState } = useAuthContext();
     const { appState, storePaymentDetails } = useAppContext();
     const [activeStep, setActiveStep] = useState(0);
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (authState?.user) {
@@ -142,7 +144,7 @@ export function CheckoutPage() {
                         fullWidth
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}
-                        onClick={() => handleCheckOut()}
+                        onClick={() =>{handleCheckOut();navigate("/psuccessful")}}
                     >
                         Checkout
                     </Button>

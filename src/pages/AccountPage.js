@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState,useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import Grid from '@mui/material/Grid';
@@ -40,6 +41,30 @@ const plans = [
 export default function AccountPage() {
     const { authState } = useAuthContext();
 
+    const[userdata, setuserdata] = useState({})
+   
+      useEffect(()=>{
+          const fetchTUser = async()=>{
+              const responseOptions = {
+                  method:'POST',
+                  headers:{
+                      'Content-Type':'application/json',
+                      Authorization:"Bearer " + localStorage.getItem("userToken")
+                  },
+              }
+              const response = await fetch("http://127.0.0.1:8000/api/v1/users/token/decoder", responseOptions)
+              const data = await response.json()
+              if(!response.ok){
+                  console.log({"error":data.detail})
+              }
+              else{
+                  console.log(data)
+                  setuserdata(data)
+              }
+          }
+          fetchTUser();
+      },[])
+
     return (
         <Container component="main" sx={{ mt: 4 }}>
             <Grid container spacing={2}>
@@ -54,6 +79,7 @@ export default function AccountPage() {
                                 id="firstName"
                                 label="First Name"
                                 defaultValue={authState?.user?.firstName}
+                               
                                 disabled
                                 autoFocus
                             />
@@ -66,6 +92,7 @@ export default function AccountPage() {
                                 label="Last Name"
                                 name="lastName"
                                 defaultValue={authState?.user?.lastName}
+                               
                                 disabled
                                 autoComplete="family-name"
                             />
@@ -78,6 +105,7 @@ export default function AccountPage() {
                                 label="Mobile"
                                 name="mobileNumber"
                                 defaultValue={authState?.user?.mobileNumber}
+                              
                                 disabled
                                 autoComplete="phone"
                             />
@@ -90,6 +118,7 @@ export default function AccountPage() {
                                 label="Email Address"
                                 name="email"
                                 defaultValue={authState?.user?.emailAddress}
+                              
                                 disabled
                                 autoComplete="email"
                             />

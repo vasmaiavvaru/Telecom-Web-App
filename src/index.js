@@ -14,6 +14,9 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { AuthProvider } from './contexts/AuthContext';
 import AccountPage from './pages/AccountPage';
 import { AppProvider } from './contexts/AppContext';
+import { PaymentSuccess } from './pages/PaymentSucces';
+
+
 
 
 
@@ -35,6 +38,7 @@ root.render(
                         <Route path="/signup" element={<SignupPage />} />
                         <Route path="/checkout" element={<CheckoutPage />} />
                         <Route path="/account" element={<AccountPage />} />
+                        <Route path="/psuccessful" element={<PaymentSuccess />} />
                     </Routes>
                 </BrowserRouter>
             </AppProvider>
