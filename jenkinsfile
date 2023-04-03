@@ -1,0 +1,41 @@
+pipeline {
+  agent any
+  
+  stages {
+    stage('Clone repository') {
+      steps {
+        git branch: 'Main', url: 'https://github.com/vasmaiavvaru/Telecom-Web-App-frontend.git'
+      }
+    }
+    
+    stage('Install dependencies') {
+      steps {
+        sh 'npm install'
+      }
+    }
+    
+    stage('Build') {
+      steps {
+        sh 'npm run build'
+      }
+    }
+    
+    stage('Deploy Dev') {
+      steps {
+        sh 'echo "Deploying Telecom React app to Dev..."'
+        // Deploy to IIS on Windows as a development environment
+        bat 'xcopy /y /e build "C:\\inetpub\\wwwroot\\dev"'
+      }
+    }
+    
+    stage('Deploy Prod') {
+      steps {
+        sh 'echo "Deploying Telecom React app to Prod..."'
+        // Deploy to a virtual machine as a production environment
+        withCredentials([windows(credentials: ['your-windows-credentials'])]) {
+          bat 'robocopy build "\\\\your-prod-vm\\c$\\inetpub\\wwwroot\\Telecom-Web" /MIR'
+        }
+      }
+    }
+  }
+}
